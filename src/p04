@@ -1,0 +1,212 @@
+class Portfolio {
+
+    String investorName;
+    double annualReturn;
+
+    public Portfolio(String investorName, double annualReturn) {
+        this.investorName = investorName;
+        this.annualReturn = annualReturn;
+    }
+
+    @Override
+    public String toString() {
+        return investorName + " : " + annualReturn + "%";
+    }
+}
+
+public class Problem4PortfolioReturnSorting {
+
+    public static void quickSort(
+            Portfolio[] portfolios,
+            int low,
+            int high) {
+
+        if (low < high) {
+
+            int pivotIndex =
+                    partition(portfolios, low, high);
+
+            quickSort(
+                    portfolios,
+                    low,
+                    pivotIndex - 1);
+
+            quickSort(
+                    portfolios,
+                    pivotIndex + 1,
+                    high);
+        }
+    }
+
+    public static int partition(
+            Portfolio[] portfolios,
+            int low,
+            int high) {
+
+        double pivot =
+                portfolios[high].annualReturn;
+
+        int i = low - 1;
+
+        for (int j = low; j < high; j++) {
+
+            if (portfolios[j].annualReturn < pivot) {
+
+                i++;
+
+                Portfolio temp = portfolios[i];
+                portfolios[i] = portfolios[j];
+                portfolios[j] = temp;
+            }
+        }
+
+        Portfolio temp = portfolios[i + 1];
+        portfolios[i + 1] = portfolios[high];
+        portfolios[high] = temp;
+
+        return i + 1;
+    }
+
+    public static void mergeSort(
+            Portfolio[] portfolios,
+            int left,
+            int right) {
+
+        if (left < right) {
+
+            int mid = (left + right) / 2;
+
+            mergeSort(portfolios, left, mid);
+
+            mergeSort(portfolios, mid + 1, right);
+
+            merge(portfolios, left, mid, right);
+        }
+    }
+
+    public static void merge(
+            Portfolio[] portfolios,
+            int left,
+            int mid,
+            int right) {
+
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
+
+        Portfolio[] leftArray =
+                new Portfolio[n1];
+
+        Portfolio[] rightArray =
+                new Portfolio[n2];
+
+        for (int i = 0; i < n1; i++) {
+            leftArray[i] = portfolios[left + i];
+        }
+
+        for (int j = 0; j < n2; j++) {
+            rightArray[j] = portfolios[mid + 1 + j];
+        }
+
+        int i = 0;
+        int j = 0;
+        int k = left;
+
+        while (i < n1 && j < n2) {
+
+            if (leftArray[i].annualReturn >=
+                    rightArray[j].annualReturn) {
+
+                portfolios[k] = leftArray[i];
+                i++;
+
+            } else {
+
+                portfolios[k] = rightArray[j];
+                j++;
+            }
+
+            k++;
+        }
+
+        while (i < n1) {
+
+            portfolios[k] = leftArray[i];
+            i++;
+            k++;
+        }
+
+        while (j < n2) {
+
+            portfolios[k] = rightArray[j];
+            j++;
+            k++;
+        }
+    }
+
+    public static double averageReturn(
+            Portfolio[] portfolios) {
+
+        double total = 0;
+
+        for (Portfolio p : portfolios) {
+            total += p.annualReturn;
+        }
+
+        return total / portfolios.length;
+    }
+
+    public static void printPortfolios(
+            String message,
+            Portfolio[] portfolios) {
+
+        System.out.println(message);
+
+        for (Portfolio p : portfolios) {
+            System.out.println(p);
+        }
+
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+
+        Portfolio[] portfolios = {
+
+                new Portfolio("InvestorA", 12.5),
+
+                new Portfolio("InvestorB", 8.3),
+
+                new Portfolio("InvestorC", 15.7),
+
+                new Portfolio("InvestorD", 10.2)
+        };
+
+        Portfolio[] quickArray =
+                portfolios.clone();
+
+        Portfolio[] mergeArray =
+                portfolios.clone();
+
+        quickSort(
+                quickArray,
+                0,
+                quickArray.length - 1);
+
+        printPortfolios(
+                "Quick Sort (Ascending Returns):",
+                quickArray);
+
+        mergeSort(
+                mergeArray,
+                0,
+                mergeArray.length - 1);
+
+        printPortfolios(
+                "Merge Sort (Descending Returns):",
+                mergeArray);
+
+        System.out.println(
+                "Average Return : " +
+                        averageReturn(portfolios) + "%");
+    }
+}
