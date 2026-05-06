@@ -1,0 +1,240 @@
+class Trade {
+
+    String tradeId;
+    int volume;
+
+    public Trade(String tradeId, int volume) {
+        this.tradeId = tradeId;
+        this.volume = volume;
+    }
+
+    @Override
+    public String toString() {
+        return tradeId + " : " + volume;
+    }
+}
+
+public class Problem3TradeVolumeAnalysis {
+
+    public static void mergeSort(
+            Trade[] trades,
+            int left,
+            int right) {
+
+        if (left < right) {
+
+            int mid = (left + right) / 2;
+
+            mergeSort(trades, left, mid);
+
+            mergeSort(trades, mid + 1, right);
+
+            merge(trades, left, mid, right);
+        }
+    }
+
+    public static void merge(
+            Trade[] trades,
+            int left,
+            int mid,
+            int right) {
+
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
+
+        Trade[] leftArray = new Trade[n1];
+        Trade[] rightArray = new Trade[n2];
+
+        for (int i = 0; i < n1; i++) {
+            leftArray[i] = trades[left + i];
+        }
+
+        for (int j = 0; j < n2; j++) {
+            rightArray[j] = trades[mid + 1 + j];
+        }
+
+        int i = 0;
+        int j = 0;
+        int k = left;
+
+        while (i < n1 && j < n2) {
+
+            if (leftArray[i].volume <= rightArray[j].volume) {
+
+                trades[k] = leftArray[i];
+                i++;
+
+            } else {
+
+                trades[k] = rightArray[j];
+                j++;
+            }
+
+            k++;
+        }
+
+        while (i < n1) {
+
+            trades[k] = leftArray[i];
+            i++;
+            k++;
+        }
+
+        while (j < n2) {
+
+            trades[k] = rightArray[j];
+            j++;
+            k++;
+        }
+    }
+
+    public static void quickSort(
+            Trade[] trades,
+            int low,
+            int high) {
+
+        if (low < high) {
+
+            int pivotIndex =
+                    partition(trades, low, high);
+
+            quickSort(trades, low, pivotIndex - 1);
+
+            quickSort(trades, pivotIndex + 1, high);
+        }
+    }
+
+    public static int partition(
+            Trade[] trades,
+            int low,
+            int high) {
+
+        int pivot = trades[high].volume;
+
+        int i = low - 1;
+
+        for (int j = low; j < high; j++) {
+
+            if (trades[j].volume > pivot) {
+
+                i++;
+
+                Trade temp = trades[i];
+                trades[i] = trades[j];
+                trades[j] = temp;
+            }
+        }
+
+        Trade temp = trades[i + 1];
+        trades[i + 1] = trades[high];
+        trades[high] = temp;
+
+        return i + 1;
+    }
+
+    public static Trade[] mergeTradeLists(
+            Trade[] morning,
+            Trade[] afternoon) {
+
+        Trade[] merged =
+                new Trade[morning.length + afternoon.length];
+
+        int index = 0;
+
+        for (Trade t : morning) {
+            merged[index++] = t;
+        }
+
+        for (Trade t : afternoon) {
+            merged[index++] = t;
+        }
+
+        return merged;
+    }
+
+    public static int totalVolume(
+            Trade[] trades) {
+
+        int total = 0;
+
+        for (Trade t : trades) {
+            total += t.volume;
+        }
+
+        return total;
+    }
+
+    public static void printTrades(
+            String message,
+            Trade[] trades) {
+
+        System.out.println(message);
+
+        for (Trade t : trades) {
+            System.out.println(t);
+        }
+
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+
+        Trade[] trades = {
+
+                new Trade("trade1", 100),
+
+                new Trade("trade2", 300),
+
+                new Trade("trade3", 500)
+        };
+
+        Trade[] mergeArray = trades.clone();
+
+        Trade[] quickArray = trades.clone();
+
+        mergeSort(
+                mergeArray,
+                0,
+                mergeArray.length - 1);
+
+        printTrades(
+                "Merge Sort (Ascending Volume):",
+                mergeArray);
+
+        quickSort(
+                quickArray,
+                0,
+                quickArray.length - 1);
+
+        printTrades(
+                "Quick Sort (Descending Volume):",
+                quickArray);
+
+        Trade[] morningTrades = {
+
+                new Trade("m1", 200),
+
+                new Trade("m2", 300)
+        };
+
+        Trade[] afternoonTrades = {
+
+                new Trade("a1", 150),
+
+                new Trade("a2", 250)
+        };
+
+        Trade[] mergedTrades =
+                mergeTradeLists(
+                        morningTrades,
+                        afternoonTrades);
+
+        printTrades(
+                "Merged Trades:",
+                mergedTrades);
+
+        System.out.println(
+                "Total Volume : " +
+                        totalVolume(mergedTrades));
+    }
+}
