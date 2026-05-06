@@ -1,0 +1,170 @@
+class Account {
+
+    int accountNumber;
+    String customerName;
+    double balance;
+
+    public Account(
+            int accountNumber,
+            String customerName,
+            double balance) {
+
+        this.accountNumber = accountNumber;
+        this.customerName = customerName;
+        this.balance = balance;
+    }
+
+    @Override
+    public String toString() {
+
+        return "Account No : " +
+                accountNumber +
+                " , Name : " +
+                customerName +
+                " , Balance : " +
+                balance;
+    }
+}
+
+public class Problem5AccountSearch {
+
+    public static int linearSearch(
+            Account[] accounts,
+            int target) {
+
+        for (int i = 0; i < accounts.length; i++) {
+
+            if (accounts[i].accountNumber == target) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    public static int binarySearch(
+            Account[] accounts,
+            int target) {
+
+        int left = 0;
+        int right = accounts.length - 1;
+
+        while (left <= right) {
+
+            int mid = (left + right) / 2;
+
+            if (accounts[mid].accountNumber == target) {
+
+                return mid;
+
+            } else if (accounts[mid].accountNumber < target) {
+
+                left = mid + 1;
+
+            } else {
+
+                right = mid - 1;
+            }
+        }
+
+        return -1;
+    }
+
+    public static void sortAccounts(
+            Account[] accounts) {
+
+        for (int i = 0; i < accounts.length - 1; i++) {
+
+            for (int j = 0;
+                 j < accounts.length - i - 1;
+                 j++) {
+
+                if (accounts[j].accountNumber >
+                        accounts[j + 1].accountNumber) {
+
+                    Account temp = accounts[j];
+
+                    accounts[j] = accounts[j + 1];
+
+                    accounts[j + 1] = temp;
+                }
+            }
+        }
+    }
+
+    public static void displayResult(
+            Account[] accounts,
+            int index) {
+
+        if (index != -1) {
+
+            System.out.println(
+                    "Account Found:");
+
+            System.out.println(accounts[index]);
+
+        } else {
+
+            System.out.println(
+                    "Account Not Found");
+        }
+
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+
+        Account[] accounts = {
+
+                new Account(
+                        1003,
+                        "Amarnath",
+                        15000),
+
+                new Account(
+                        1001,
+                        "Rahul",
+                        22000),
+
+                new Account(
+                        1005,
+                        "Kiran",
+                        18000),
+
+                new Account(
+                        1002,
+                        "Varun",
+                        25000)
+        };
+
+        int linearTarget = 1005;
+
+        System.out.println(
+                "Linear Search Result:");
+
+        int linearIndex =
+                linearSearch(
+                        accounts,
+                        linearTarget);
+
+        displayResult(
+                accounts,
+                linearIndex);
+
+        sortAccounts(accounts);
+
+        int binaryTarget = 1002;
+
+        System.out.println(
+                "Binary Search Result:");
+
+        int binaryIndex =
+                binarySearch(
+                        accounts,
+                        binaryTarget);
+
+        displayResult(
+                accounts,
+                binaryIndex);
+    }
+}
