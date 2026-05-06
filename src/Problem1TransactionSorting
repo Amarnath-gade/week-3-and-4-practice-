@@ -14,9 +14,12 @@ class Trade {
     }
 }
 
-public class Problem3HistoricalTradeVolumeAnalysis {
+public class Problem3TradeVolumeAnalysis {
 
-    public static void mergeSort(Trade[] trades, int left, int right) {
+    public static void mergeSort(
+            Trade[] trades,
+            int left,
+            int right) {
 
         if (left < right) {
 
@@ -130,26 +133,27 @@ public class Problem3HistoricalTradeVolumeAnalysis {
     }
 
     public static Trade[] mergeTradeLists(
-            Trade[] morning,
-            Trade[] afternoon) {
+            Trade[] first,
+            Trade[] second) {
 
         Trade[] merged =
-                new Trade[morning.length + afternoon.length];
+                new Trade[first.length + second.length];
 
         int index = 0;
 
-        for (Trade t : morning) {
+        for (Trade t : first) {
             merged[index++] = t;
         }
 
-        for (Trade t : afternoon) {
+        for (Trade t : second) {
             merged[index++] = t;
         }
 
         return merged;
     }
 
-    public static int totalVolume(Trade[] trades) {
+    public static int calculateTotalVolume(
+            Trade[] trades) {
 
         int total = 0;
 
@@ -226,11 +230,12 @@ public class Problem3HistoricalTradeVolumeAnalysis {
                         afternoonTrades);
 
         printTrades(
-                "Merged Morning + Afternoon Trades:",
+                "Merged Trade List:",
                 mergedTrades);
 
         System.out.println(
                 "Total Volume : " +
-                        totalVolume(mergedTrades));
+                        calculateTotalVolume(
+                                mergedTrades));
     }
 }
